@@ -1,0 +1,53 @@
+.stageList {
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.stageRow {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: var(--space-5);
+  padding: var(--space-5) 0;
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.stageNumber {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-faint);
+  padding-top: var(--space-1);
+}
+
+.stageTitle {
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-1);
+}
+
+.stageSummary {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  max-width: 60ch;
+}
+
+.deliveryRow {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: var(--space-5);
+  padding: var(--space-5) 0;
+}
+
+.deliveryLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-success);
+  padding-top: var(--space-1);
+}
+
+@media (max-width: 640px) {
+  .stageRow,
+  .deliveryRow {
+    grid-template-columns: 40px 1fr;
+    gap: var(--space-3);
+  }
+}

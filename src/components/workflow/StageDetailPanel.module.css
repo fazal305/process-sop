@@ -1,0 +1,105 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  background: color-mix(in srgb, black 45%, transparent);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.panel {
+  width: min(480px, 100%);
+  height: 100%;
+  background: var(--color-surface-elevated);
+  border-left: var(--border-width) solid var(--color-border);
+  padding: var(--space-6) var(--space-5);
+  overflow-y: auto;
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-primary);
+  letter-spacing: 0.06em;
+}
+
+.title {
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  margin-top: var(--space-1);
+}
+
+.closeButton {
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-md);
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.closeButton:hover {
+  background: var(--color-surface-sunken);
+  color: var(--color-text);
+}
+
+.section {
+  margin-bottom: var(--space-5);
+}
+
+.sectionLabel {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  color: var(--color-text-faint);
+  margin-bottom: var(--space-2);
+}
+
+.sectionBody {
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  line-height: var(--leading-relaxed);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.listItem {
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  padding-left: var(--space-4);
+  position: relative;
+}
+
+.listItem::before {
+  content: '\2022';
+  position: absolute;
+  left: 0;
+  color: var(--color-text-faint);
+}
+
+.example {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  background: var(--color-surface-sunken);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  line-height: var(--leading-relaxed);
+  white-space: pre-wrap;
+}

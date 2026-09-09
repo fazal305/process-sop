@@ -1,0 +1,41 @@
+.log {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.entry {
+  display: flex;
+  gap: var(--space-3);
+  align-items: baseline;
+  color: var(--color-text-muted);
+}
+
+.entryDone {
+  color: var(--color-text);
+}
+
+.entryFailed {
+  color: var(--color-danger);
+}
+
+.mark {
+  width: 14px;
+  flex-shrink: 0;
+  text-align: center;
+  color: var(--color-text-faint);
+}
+
+.entryDone .mark {
+  color: var(--color-success);
+}
+
+.entryFailed .mark {
+  color: var(--color-danger);
+}
+
+.entryActive .mark {
+  color: var(--color-primary);
+}
