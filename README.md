@@ -4,6 +4,10 @@ An interactive, illustrative visualization of a disciplined five-stage informati
 pipeline — from raw input reception through context analysis, tool invocation, content
 synthesis, and quality/compliance verification, to a final, gated delivery.
 
+## Live Demo
+
+**[process-sop.vercel.app](https://process-sop.vercel.app)**
+
 ## Problem statement
 
 Handling a request as one undifferentiated pass from question to answer makes failures hard to
