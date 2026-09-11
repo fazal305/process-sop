@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://process-sop.vercel.app/sitemap.xml
