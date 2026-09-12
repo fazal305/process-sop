@@ -2,21 +2,43 @@ import { useState } from 'react';
 import { OPENROUTER_DEFAULT_MODEL } from '../../lib/openrouter';
 import styles from './OpenRouterSettings.module.css';
 
+const OPENROUTER_KEY_PATTERN = /^sk-or-/;
+
+function getKeyFormatError(value) {
+  const trimmed = value.trim();
+  if (!trimmed) return null; // empty is allowed — falls back to local simulation
+  if (!OPENROUTER_KEY_PATTERN.test(trimmed)) {
+    return 'This doesn’t look like a valid OpenRouter key (expected to start with "sk-or-"). Double-check it before saving.';
+  }
+  return null;
+}
+
 export default function OpenRouterSettings({ apiKey, setApiKey, model, setModel }) {
   const [open, setOpen] = useState(false);
   const [draftKey, setDraftKey] = useState(apiKey);
   const [draftModel, setDraftModel] = useState(model || OPENROUTER_DEFAULT_MODEL);
   const [reveal, setReveal] = useState(false);
+  const [keyError, setKeyError] = useState(() => getKeyFormatError(apiKey || ''));
 
   const connected = Boolean(apiKey);
 
+  function handleKeyChange(event) {
+    const value = event.target.value;
+    setDraftKey(value);
+    setKeyError(getKeyFormatError(value));
+  }
+
   function handleSave() {
+    const error = getKeyFormatError(draftKey);
+    setKeyError(error);
+    if (error) return;
     setApiKey(draftKey.trim());
     setModel(draftModel.trim() || OPENROUTER_DEFAULT_MODEL);
   }
 
   function handleClear() {
     setDraftKey('');
+    setKeyError(null);
     setApiKey('');
   }
 
@@ -49,14 +71,21 @@ export default function OpenRouterSettings({ apiKey, setApiKey, model, setModel 
                 className={styles.input}
                 type={reveal ? 'text' : 'password'}
                 value={draftKey}
-                onChange={(event) => setDraftKey(event.target.value)}
+                onChange={handleKeyChange}
                 placeholder="sk-or-..."
                 autoComplete="off"
+                aria-invalid={keyError ? 'true' : 'false'}
+                aria-describedby={keyError ? 'openrouter-key-error' : undefined}
               />
               <button type="button" className={styles.smallButton} onClick={() => setReveal((v) => !v)}>
                 {reveal ? 'Hide' : 'Show'}
               </button>
             </div>
+            {keyError && (
+              <p id="openrouter-key-error" className={styles.fieldError} role="alert">
+                {keyError}
+              </p>
+            )}
           </div>
 
           <div className={styles.field}>
@@ -73,7 +102,12 @@ export default function OpenRouterSettings({ apiKey, setApiKey, model, setModel 
           </div>
 
           <div className={styles.actions}>
-            <button type="button" className={styles.buttonPrimary} onClick={handleSave}>
+            <button
+              type="button"
+              className={styles.buttonPrimary}
+              onClick={handleSave}
+              disabled={Boolean(keyError)}
+            >
               Save
             </button>
             <button type="button" className={styles.buttonGhost} onClick={handleClear}>

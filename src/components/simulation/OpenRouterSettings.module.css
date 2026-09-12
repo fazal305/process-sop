@@ -87,6 +87,12 @@
   background: var(--color-surface-sunken);
 }
 
+.fieldError {
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-danger);
+}
+
 .actions {
   display: flex;
   gap: var(--space-3);
@@ -104,6 +110,11 @@
 
 .buttonPrimary:hover {
   background: var(--color-primary-strong);
+}
+
+.buttonPrimary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .buttonGhost {
