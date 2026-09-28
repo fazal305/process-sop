@@ -1,12 +1,12 @@
-import { Route, Routes } from 'react-router-dom';
-import AppShell from './components/layout/AppShell';
-import { WorkflowProvider } from './context/WorkflowContext';
-import Overview from './pages/Overview';
-import Workflow from './pages/Workflow';
-import Simulation from './pages/Simulation';
-import Documentation from './pages/Documentation';
-import About from './pages/About';
-import NotFound from './pages/NotFound';
+import { Route, Routes } from "react-router-dom";
+import AppShell from "./components/layout/AppShell";
+import { WorkflowProvider } from "./context/WorkflowContext";
+import Overview from "./pages/Overview";
+import Workflow from "./pages/Workflow";
+import Simulation from "./pages/Simulation";
+import Documentation from "./pages/Documentation";
+import About from "./pages/About";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (

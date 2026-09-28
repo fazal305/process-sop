@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import styles from './StageDetailPanel.module.css';
+import { useEffect, useRef } from "react";
+import styles from "./StageDetailPanel.module.css";
 
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
@@ -13,14 +13,16 @@ export default function StageDetailPanel({ stage, statusLabel, onClose }) {
     closeRef.current?.focus();
 
     function onKeyDown(event) {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         onClose();
         return;
       }
 
-      if (event.key !== 'Tab' || !panelRef.current) return;
+      if (event.key !== "Tab" || !panelRef.current) return;
 
-      const focusable = Array.from(panelRef.current.querySelectorAll(FOCUSABLE_SELECTOR));
+      const focusable = Array.from(
+        panelRef.current.querySelectorAll(FOCUSABLE_SELECTOR),
+      );
       if (focusable.length === 0) return;
 
       const first = focusable[0];
@@ -35,9 +37,9 @@ export default function StageDetailPanel({ stage, statusLabel, onClose }) {
       }
     }
 
-    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener("keydown", onKeyDown);
     return () => {
-      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener("keydown", onKeyDown);
       previouslyFocused?.focus?.();
     };
   }, [onClose]);
@@ -63,7 +65,13 @@ export default function StageDetailPanel({ stage, statusLabel, onClose }) {
               {stage.title}
             </h2>
           </div>
-          <button ref={closeRef} type="button" className={styles.closeButton} onClick={onClose} aria-label="Close stage details">
+          <button
+            ref={closeRef}
+            type="button"
+            className={styles.closeButton}
+            onClick={onClose}
+            aria-label="Close stage details"
+          >
             &#10005;
           </button>
         </div>

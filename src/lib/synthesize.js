@@ -11,34 +11,47 @@ function hashString(str) {
   return hash;
 }
 
-const CONDITIONS = ['Partly cloudy', 'Clear skies', 'Light rain expected', 'Overcast', 'Sunny'];
+const CONDITIONS = [
+  "Partly cloudy",
+  "Clear skies",
+  "Light rain expected",
+  "Overcast",
+  "Sunny",
+];
 
 function extractLocation(input) {
   const match = input.match(/\bin\s+([A-Z][a-zA-Z]+)/);
-  return match ? match[1] : 'the requested location';
+  return match ? match[1] : "the requested location";
 }
 
 function extractArithmetic(input) {
-  const match = input.match(/(-?\d+(?:\.\d+)?)\s*([x×*+\-/÷])\s*(-?\d+(?:\.\d+)?)/i);
+  const match = input.match(
+    /(-?\d+(?:\.\d+)?)\s*([x×*+\-/÷])\s*(-?\d+(?:\.\d+)?)/i,
+  );
   if (!match) return null;
 
   const [, aRaw, opRaw, bRaw] = match;
   const a = Number(aRaw);
   const b = Number(bRaw);
-  const op = opRaw === 'x' || opRaw === '*' || opRaw === '×' ? '×' : opRaw === '÷' || opRaw === '/' ? '÷' : opRaw;
+  const op =
+    opRaw === "x" || opRaw === "*" || opRaw === "×"
+      ? "×"
+      : opRaw === "÷" || opRaw === "/"
+        ? "÷"
+        : opRaw;
 
   let result;
   switch (op) {
-    case '×':
+    case "×":
       result = a * b;
       break;
-    case '÷':
+    case "÷":
       result = b !== 0 ? a / b : null;
       break;
-    case '+':
+    case "+":
       result = a + b;
       break;
-    case '-':
+    case "-":
       result = a - b;
       break;
     default:
@@ -52,10 +65,14 @@ function extractArithmetic(input) {
 // Simulates retrieving information via the tool selected in Stage 03.
 // CALCULATOR is real math; everything else is a fixed demo payload.
 export function simulateToolCall(tool, input) {
-  if (tool === 'CALCULATOR') {
+  if (tool === "CALCULATOR") {
     const arithmetic = extractArithmetic(input);
     if (!arithmetic) {
-      return { tool, ok: false, summary: 'No parseable arithmetic expression found.' };
+      return {
+        tool,
+        ok: false,
+        summary: "No parseable arithmetic expression found.",
+      };
     }
     return {
       tool,
@@ -67,7 +84,7 @@ export function simulateToolCall(tool, input) {
     };
   }
 
-  if (tool === 'WEB_SEARCH') {
+  if (tool === "WEB_SEARCH") {
     const location = extractLocation(input);
     const seed = hashString(location + input.length);
     const condition = CONDITIONS[seed % CONDITIONS.length];
@@ -83,12 +100,12 @@ export function simulateToolCall(tool, input) {
     };
   }
 
-  if (tool === 'FILE_PROCESSING' || tool === 'EXTERNAL_API') {
+  if (tool === "FILE_PROCESSING" || tool === "EXTERNAL_API") {
     return {
       tool,
       ok: true,
       demo: true,
-      summary: `${tool.replace('_', ' ').toLowerCase()} result unavailable in this demo — no such integration is connected.`,
+      summary: `${tool.replace("_", " ").toLowerCase()} result unavailable in this demo — no such integration is connected.`,
     };
   }
 
@@ -98,11 +115,11 @@ export function simulateToolCall(tool, input) {
 // Local, deterministic draft — used whenever no OpenRouter key is supplied,
 // or as the fallback if a live call fails.
 export function localSynthesize(input, toolResult) {
-  if (toolResult?.tool === 'CALCULATOR' && toolResult.ok) {
+  if (toolResult?.tool === "CALCULATOR" && toolResult.ok) {
     return `${toolResult.expression} = ${toolResult.result}`;
   }
 
-  if (toolResult?.tool === 'WEB_SEARCH' && toolResult.ok) {
+  if (toolResult?.tool === "WEB_SEARCH" && toolResult.ok) {
     return `${toolResult.location} — tomorrow: ${toolResult.condition.toLowerCase()}, high ${toolResult.highC}°C.`;
   }
 

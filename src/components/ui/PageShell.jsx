@@ -1,4 +1,4 @@
-import styles from './PageShell.module.css';
+import styles from "./PageShell.module.css";
 
 export default function PageShell({ eyebrow, title, subtitle, children }) {
   return (

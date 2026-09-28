@@ -1,4 +1,4 @@
-import { STAGE_STATUS, WORKFLOW_STATE as S } from './constants';
+import { STAGE_STATUS, WORKFLOW_STATE as S } from "./constants";
 
 // Explicit transition table: currentState -> { ACTION: nextState }.
 // Any action not listed for the current state is rejected by the reducer,
@@ -62,20 +62,26 @@ const STATE_ORDER = [
 ];
 
 const STAGE_OF_STATE = {
-  [S.INPUT_RECEIVED]: 'INPUT',
-  [S.CONTEXT_ANALYZED]: 'CONTEXT',
-  [S.TOOLS_EVALUATED]: 'TOOLS',
-  [S.TOOLS_RUNNING]: 'TOOLS',
-  [S.SYNTHESIZING]: 'SYNTHESIS',
-  [S.VERIFYING]: 'VERIFICATION',
-  [S.READY]: 'VERIFICATION',
+  [S.INPUT_RECEIVED]: "INPUT",
+  [S.CONTEXT_ANALYZED]: "CONTEXT",
+  [S.TOOLS_EVALUATED]: "TOOLS",
+  [S.TOOLS_RUNNING]: "TOOLS",
+  [S.SYNTHESIZING]: "SYNTHESIS",
+  [S.VERIFYING]: "VERIFICATION",
+  [S.READY]: "VERIFICATION",
 };
 
-const STAGE_SEQUENCE = ['INPUT', 'CONTEXT', 'TOOLS', 'SYNTHESIS', 'VERIFICATION'];
+const STAGE_SEQUENCE = [
+  "INPUT",
+  "CONTEXT",
+  "TOOLS",
+  "SYNTHESIS",
+  "VERIFICATION",
+];
 
 export const initialWorkflowState = {
   value: S.IDLE,
-  input: '',
+  input: "",
   toolsRequired: false,
   selectedTool: null,
   error: null,
@@ -93,28 +99,53 @@ export function workflowReducer(state, action) {
     return state;
   }
 
-  const resolvedNext = action.type === 'RETRY' ? state.failedFrom ?? S.IDLE : nextValue;
+  const resolvedNext =
+    action.type === "RETRY" ? (state.failedFrom ?? S.IDLE) : nextValue;
 
   const base = {
     ...state,
     value: resolvedNext,
-    history: [...state.history, { from: state.value, action: action.type, to: resolvedNext }],
+    history: [
+      ...state.history,
+      { from: state.value, action: action.type, to: resolvedNext },
+    ],
   };
 
   switch (action.type) {
-    case 'SUBMIT_INPUT':
-      return { ...initialWorkflowState, value: resolvedNext, input: action.payload, history: base.history };
-    case 'EVALUATE_TOOLS':
-      return { ...base, toolsRequired: action.payload.toolsRequired, selectedTool: action.payload.tool ?? null };
-    case 'TOOL_FAILURE':
-      return { ...base, error: action.payload ?? 'Tool invocation failed.', failedFrom: S.TOOLS_RUNNING };
-    case 'SYNTHESIS_FAILURE':
-      return { ...base, error: action.payload ?? 'Synthesis failed.', failedFrom: S.SYNTHESIZING };
-    case 'VERIFICATION_FAIL':
-      return { ...base, error: action.payload ?? 'Verification failed.', failedFrom: S.VERIFYING };
-    case 'RETRY':
+    case "SUBMIT_INPUT":
+      return {
+        ...initialWorkflowState,
+        value: resolvedNext,
+        input: action.payload,
+        history: base.history,
+      };
+    case "EVALUATE_TOOLS":
+      return {
+        ...base,
+        toolsRequired: action.payload.toolsRequired,
+        selectedTool: action.payload.tool ?? null,
+      };
+    case "TOOL_FAILURE":
+      return {
+        ...base,
+        error: action.payload ?? "Tool invocation failed.",
+        failedFrom: S.TOOLS_RUNNING,
+      };
+    case "SYNTHESIS_FAILURE":
+      return {
+        ...base,
+        error: action.payload ?? "Synthesis failed.",
+        failedFrom: S.SYNTHESIZING,
+      };
+    case "VERIFICATION_FAIL":
+      return {
+        ...base,
+        error: action.payload ?? "Verification failed.",
+        failedFrom: S.VERIFYING,
+      };
+    case "RETRY":
       return { ...base, error: null, failedFrom: null };
-    case 'RESET':
+    case "RESET":
       return { ...initialWorkflowState };
     default:
       return base;
@@ -130,10 +161,16 @@ export function getStageStatuses(state) {
   // pipeline stage has completed, so treat it like a completed READY.
   const effectiveStageState = isDelivered ? S.READY : state.value;
   const currentStageId = STAGE_OF_STATE[effectiveStageState] ?? null;
-  const currentIndex = currentStageId ? STAGE_SEQUENCE.indexOf(currentStageId) : -1;
+  const currentIndex = currentStageId
+    ? STAGE_SEQUENCE.indexOf(currentStageId)
+    : -1;
   const isError = state.value === S.ERROR;
-  const failedStageId = isError ? STAGE_OF_STATE[state.failedFrom] ?? null : null;
-  const failedIndex = failedStageId ? STAGE_SEQUENCE.indexOf(failedStageId) : -1;
+  const failedStageId = isError
+    ? (STAGE_OF_STATE[state.failedFrom] ?? null)
+    : null;
+  const failedIndex = failedStageId
+    ? STAGE_SEQUENCE.indexOf(failedStageId)
+    : -1;
 
   STAGE_SEQUENCE.forEach((id, index) => {
     if (isError) {
@@ -148,7 +185,7 @@ export function getStageStatuses(state) {
       return;
     }
 
-    if (id === 'TOOLS' && !state.toolsRequired && currentIndex > index) {
+    if (id === "TOOLS" && !state.toolsRequired && currentIndex > index) {
       statuses[id] = STAGE_STATUS.SKIPPED;
       return;
     }
@@ -156,7 +193,9 @@ export function getStageStatuses(state) {
     if (index < currentIndex) statuses[id] = STAGE_STATUS.COMPLETED;
     else if (index === currentIndex) {
       statuses[id] =
-        effectiveStageState === S.READY ? STAGE_STATUS.COMPLETED : STAGE_STATUS.ACTIVE;
+        effectiveStageState === S.READY
+          ? STAGE_STATUS.COMPLETED
+          : STAGE_STATUS.ACTIVE;
     } else statuses[id] = STAGE_STATUS.PENDING;
   });
 

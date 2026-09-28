@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 // Per-viewer-only convenience storage — never sent anywhere by this hook itself.
 export function useLocalStorage(key, initialValue) {

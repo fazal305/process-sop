@@ -1,5 +1,5 @@
-const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
-const DEFAULT_MODEL = 'openai/gpt-4o-mini';
+const OPENROUTER_ENDPOINT = "https://openrouter.ai/api/v1/chat/completions";
+const DEFAULT_MODEL = "openai/gpt-4o-mini";
 const TIMEOUT_MS = 20000;
 
 export const OPENROUTER_DEFAULT_MODEL = DEFAULT_MODEL;
@@ -13,41 +13,44 @@ export async function callOpenRouter({ apiKey, model, input, toolResult }) {
 
   const contextNote = toolResult?.ok
     ? `Retrieved information available to you: ${toolResult.summary}`
-    : 'No external tool retrieval was required for this request.';
+    : "No external tool retrieval was required for this request.";
 
   try {
     const response = await fetch(OPENROUTER_ENDPOINT, {
-      method: 'POST',
+      method: "POST",
       headers: {
         Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       signal: controller.signal,
       body: JSON.stringify({
         model: model || DEFAULT_MODEL,
         messages: [
           {
-            role: 'system',
+            role: "system",
             content:
-              'You are the content-synthesis step of a demonstration pipeline. Answer the user request directly and concisely, in at most 3 sentences. Use any retrieved information provided.',
+              "You are the content-synthesis step of a demonstration pipeline. Answer the user request directly and concisely, in at most 3 sentences. Use any retrieved information provided.",
           },
-          { role: 'user', content: `${contextNote}\n\nRequest: ${input}` },
+          { role: "user", content: `${contextNote}\n\nRequest: ${input}` },
         ],
       }),
     });
 
     if (!response.ok) {
       const body = await response.json().catch(() => null);
-      throw new Error(body?.error?.message || `OpenRouter request failed (${response.status})`);
+      throw new Error(
+        body?.error?.message ||
+          `OpenRouter request failed (${response.status})`,
+      );
     }
 
     const data = await response.json();
     const text = data?.choices?.[0]?.message?.content?.trim();
-    if (!text) throw new Error('OpenRouter returned an empty response.');
+    if (!text) throw new Error("OpenRouter returned an empty response.");
     return text;
   } catch (error) {
-    if (error.name === 'AbortError') {
-      throw new Error('OpenRouter request timed out.');
+    if (error.name === "AbortError") {
+      throw new Error("OpenRouter request timed out.");
     }
     throw error;
   } finally {

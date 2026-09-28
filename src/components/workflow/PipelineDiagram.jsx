@@ -1,20 +1,20 @@
-import { STAGES, STAGE_STATUS } from '../../lib/constants';
-import styles from './PipelineDiagram.module.css';
+import { STAGES, STAGE_STATUS } from "../../lib/constants";
+import styles from "./PipelineDiagram.module.css";
 
 const STATUS_LABEL = {
-  [STAGE_STATUS.PENDING]: 'Pending',
-  [STAGE_STATUS.ACTIVE]: 'Active',
-  [STAGE_STATUS.COMPLETED]: 'Completed',
-  [STAGE_STATUS.FAILED]: 'Failed',
-  [STAGE_STATUS.SKIPPED]: 'Skipped',
+  [STAGE_STATUS.PENDING]: "Pending",
+  [STAGE_STATUS.ACTIVE]: "Active",
+  [STAGE_STATUS.COMPLETED]: "Completed",
+  [STAGE_STATUS.FAILED]: "Failed",
+  [STAGE_STATUS.SKIPPED]: "Skipped",
 };
 
 const STATUS_MARK = {
-  [STAGE_STATUS.PENDING]: '',
-  [STAGE_STATUS.ACTIVE]: '●',
-  [STAGE_STATUS.COMPLETED]: '✓',
-  [STAGE_STATUS.FAILED]: '✕',
-  [STAGE_STATUS.SKIPPED]: '–',
+  [STAGE_STATUS.PENDING]: "",
+  [STAGE_STATUS.ACTIVE]: "●",
+  [STAGE_STATUS.COMPLETED]: "✓",
+  [STAGE_STATUS.FAILED]: "✕",
+  [STAGE_STATUS.SKIPPED]: "–",
 };
 
 function markerClass(status) {
@@ -43,32 +43,45 @@ function statusBadgeClass(status) {
 }
 
 export default function PipelineDiagram({ stageStatuses, onSelectStage }) {
-  const items = [...STAGES, { id: 'DELIVERY', number: '', title: 'Final Delivery', summary: 'Released only after every verification check has passed.' }];
+  const items = [
+    ...STAGES,
+    {
+      id: "DELIVERY",
+      number: "",
+      title: "Final Delivery",
+      summary: "Released only after every verification check has passed.",
+    },
+  ];
 
   return (
-    <ol className={styles.pipeline} aria-label="Information processing pipeline">
+    <ol
+      className={styles.pipeline}
+      aria-label="Information processing pipeline"
+    >
       {items.map((stage, index) => {
         const status = stageStatuses[stage.id] ?? STAGE_STATUS.PENDING;
         const isLast = index === items.length - 1;
-        const isDelivery = stage.id === 'DELIVERY';
+        const isDelivery = stage.id === "DELIVERY";
 
         return (
           <li key={stage.id} className={styles.step}>
             <div className={styles.rail} aria-hidden="true">
-              <span className={`${styles.marker} ${markerClass(status) ?? ''}`}>
+              <span className={`${styles.marker} ${markerClass(status) ?? ""}`}>
                 {STATUS_MARK[status]}
               </span>
               {!isLast && <span className={styles.connector} />}
             </div>
 
             {isDelivery ? (
-              <div className={`${styles.card} ${cardClass(status) ?? ''}`}>
+              <div className={`${styles.card} ${cardClass(status) ?? ""}`}>
                 <div className={styles.cardHeader}>
                   <div>
                     <div className={styles.cardTitle}>{stage.title}</div>
                     <p className={styles.cardSummary}>{stage.summary}</p>
                   </div>
-                  <span className={`${styles.statusBadge} ${statusBadgeClass(status) ?? ''}`}>
+                  <span
+                    className={`${styles.statusBadge} ${statusBadgeClass(status) ?? ""}`}
+                  >
                     {STATUS_LABEL[status]}
                   </span>
                 </div>
@@ -76,7 +89,7 @@ export default function PipelineDiagram({ stageStatuses, onSelectStage }) {
             ) : (
               <button
                 type="button"
-                className={`${styles.card} ${cardClass(status) ?? ''}`}
+                className={`${styles.card} ${cardClass(status) ?? ""}`}
                 onClick={() => onSelectStage(stage.id)}
                 aria-haspopup="dialog"
               >
@@ -85,7 +98,9 @@ export default function PipelineDiagram({ stageStatuses, onSelectStage }) {
                     <span className={styles.cardNumber}>{stage.number}</span>
                     <div className={styles.cardTitle}>{stage.title}</div>
                   </div>
-                  <span className={`${styles.statusBadge} ${statusBadgeClass(status) ?? ''}`}>
+                  <span
+                    className={`${styles.statusBadge} ${statusBadgeClass(status) ?? ""}`}
+                  >
                     {STATUS_LABEL[status]}
                   </span>
                 </div>

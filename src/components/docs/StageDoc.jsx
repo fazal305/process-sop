@@ -1,4 +1,4 @@
-import styles from './StageDoc.module.css';
+import styles from "./StageDoc.module.css";
 
 export default function StageDoc({ stage }) {
   return (

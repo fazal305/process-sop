@@ -73,7 +73,8 @@
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-surface);
-  transition: border-color var(--duration-fast) var(--ease-standard),
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
     background var(--duration-fast) var(--ease-standard);
 }
 
@@ -158,9 +159,11 @@
 @keyframes soft-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 35%, transparent);
+    box-shadow: 0 0 0 0
+      color-mix(in srgb, var(--color-primary) 35%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 0%, transparent);
+    box-shadow: 0 0 0 4px
+      color-mix(in srgb, var(--color-primary) 0%, transparent);
   }
 }

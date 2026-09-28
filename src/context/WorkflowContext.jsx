@@ -1,5 +1,9 @@
-import { createContext, useContext, useMemo, useReducer } from 'react';
-import { initialWorkflowState, workflowReducer, getStageStatuses } from '../lib/workflowMachine';
+import { createContext, useContext, useMemo, useReducer } from "react";
+import {
+  initialWorkflowState,
+  workflowReducer,
+  getStageStatuses,
+} from "../lib/workflowMachine";
 
 const WorkflowContext = createContext(null);
 
@@ -15,11 +19,16 @@ export function WorkflowProvider({ children }) {
     [state],
   );
 
-  return <WorkflowContext.Provider value={value}>{children}</WorkflowContext.Provider>;
+  return (
+    <WorkflowContext.Provider value={value}>
+      {children}
+    </WorkflowContext.Provider>
+  );
 }
 
 export function useWorkflow() {
   const ctx = useContext(WorkflowContext);
-  if (!ctx) throw new Error('useWorkflow must be used within a WorkflowProvider');
+  if (!ctx)
+    throw new Error("useWorkflow must be used within a WorkflowProvider");
   return ctx;
 }
